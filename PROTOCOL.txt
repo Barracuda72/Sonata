@@ -1,0 +1,141 @@
+/* Client request 
+ * \x00 - null bytes, no newlines after them 
+ * (added for readability)!
+ * // - comments
+ */
+
+POST / HTTP/1.1
+Host: 192.168.0.3:8008
+Content-Type: application/xml
+Accept: */*
+Connection: close
+Content-Length: 390
+Connection: Keep-Alive
+User-Agent: Nokia5300/2.0 (03.50) Profile/MIDP-2.0 Configuration/CLDC-1.1 UNTRUSTED/1.0
+x-wap-profile: "http://nds1.nds.nokia.com/uaprof/N5300r100.xml"
+
+k=image/jpeg\x00
+o=280\x00                                                                // 285 for OM 3.xx
+u=/obml/http://operamini.com/\x00                                        // URL of page
+q=ru\x00                                                                 // Language code
+v=Opera Mini/2.0.4509/hifi/woodland/ru\x00                               // Version
+i=Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1630; ru; U; ssr)\x00       // Equivalet desktop version
+s=-1\x00
+n=1\x00
+A=CLDC-1.1\x00
+B=MIDP-2.0\x00
+C=nokia5300/03.50\x00                                                    // Device info
+D=en\x00                                                                 // Device language code
+E=ISO-8859-1\x00                                                         // Preferred device encoding
+d=w:240;h:320;c:16777216;m:1966084;i:1;q:0;f:0;j:0;l:256\x00             // Width,Height,NumColors,HeapSize,ImgOn(Text/Yes/None),ImgQuality(Low/High) 
+c=234314b988c03b139887e0a8596a487362b9849943199c80147bbf4353db80f9\x00   // AuthCode
+h=t19-14\x00                                                             // AuthPrefix
+f=http://ya.ru/                                                          // Referrer
+g=1\x00
+b=mod2.06\x00                                                            // Client modification (any string)
+y=ru\x00                                                                 // Language code
+t=0\x00                                                                  // Show phone numbers as links
+w=1;0\x00                                                                // Part in multipart page
+e=def                                                                    // Compression: def (Deflate, 2.xx+) or none
+
+/* If there is a form data, it's added to end of req as such: */
+...
+e=def\x00
+j=opf=1&q=Yukaba&btnG=Search+in+Google
+
+/*
+ * Server answer
+ */
+ 
+HTTP/1.1 200 OK
+Content-Type: application/octet-stream
+Connection: close
+Content-Length: 3191
+
+...binary data...
+
+/*
+ * Code part from BalletMini, that forms request
+ */
+  sprintf(buf,"k=image/jpeg");
+  ...
+  sprintf(buf,"o=280");
+  ...
+  sprintf(buf,"u=/obml/%s",URL);
+  ...
+  sprintf(buf,"q=%s",LangCode);
+  ...
+  sprintf(buf,"v=Opera Mini/2.0.4509/hifi/woodland/%s",LangCode);
+  ...
+  sprintf(buf,"i=Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1630; %s; U; ssr)",LangCode);
+  //sprintf(buf,"i-ua=Opera/9.10 (Windows NT 5.1; U; ru)");
+  ...
+  sprintf(buf,"s=-1");
+  ...
+  sprintf(buf,"n=1");
+  ...
+  //sprintf(buf,"A=CLDC-1.0");
+  sprintf(buf,"A=CLDC-1.1");
+  ...
+  sprintf(buf,"B=MIDP-2.0");
+  ...
+  sprintf(buf,"C=j2me");
+  ...
+  sprintf(buf,"D=%s",LangCode);
+  //sprintf(buf,"D=ru");
+  ...
+  sprintf(buf,"E=ISO-8859-1");
+  ...
+  switch(PIC_QUALITY)
+  {
+  case 0:
+  default:
+    i=2;
+    j=0;
+    break;
+  case 1:
+    i=0;
+    j=0;
+    break;
+  case 2:
+    i=1;
+    j=0;
+    break;
+  case 3:
+    i=1;
+    j=1;
+    break;
+  }
+  ...
+  sprintf(buf,"d=w:%d;h:%d;c:65536;m:%d;i:%d;q:%d;f:0;j:0;l:256",ScreenW(),ScreenH(),JAVA_HEAP_SIZE,i,j);
+  ...
+  sprintf(buf,"c=%s",AUTH_CODE);
+  ...
+  sprintf(buf,"h=%s",AUTH_PREFIX);
+  ...
+  if (from_url)
+  {
+    sprintf(buf,"f=%s",from_url);
+    ...
+  }
+  
+  sprintf(buf,"g=1");
+  ...
+  sprintf(buf,"b=mod2.04");
+  ...
+  sprintf(buf,"y=%s",LangCode);
+  ...
+  sprintf(buf,"t=-1");
+  //sprintf(buf,"t=2");
+  ...
+  sprintf(buf,"w=1;1");
+  //sprintf(buf,"w=1;0");
+  ...
+  sprintf(buf,"e=def");
+  ...
+  if (goto_params)
+  {
+    sprintf(buf,"j=opf=1");
+    ...
+  }
+  
