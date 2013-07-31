@@ -172,11 +172,16 @@ void xml_walk_tree(xmlNode * a_node, char *url, OMS_PAGE *p)
           break;
         
         case HTML_TAG_TEXTAREA:
-          name = xml_get_attr(cur_node, "name");
-          if (!name) name = "dname";
-          link = xml_get_attr(cur_node, "value");
-          if (!link) link = "";
-          oms_add_text_input(p, name, link);
+          // HACK for google.com and similar
+          name = xml_get_attr(cur_node, "style");
+          if (!name || !strstr(name, "display:none"))
+          {
+            name = xml_get_attr(cur_node, "name");
+            if (!name) name = "dname";
+            link = xml_get_attr(cur_node, "value");
+            if (!link) link = "";
+            oms_add_text_input(p, name, link);
+          }
           break;
           
         case HTML_TAG_INPUT:

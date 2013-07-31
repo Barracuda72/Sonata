@@ -218,7 +218,8 @@ static void oms_finalize_page(OMS_PAGE *p)
   free(p->data);
   
   p->data = data;
-  p->size = (sizeof(OMS_HEADER_V2) + p->size) -  strm.avail_out;
+  //p->size = (sizeof(OMS_HEADER_V2) + p->size) -  strm.avail_out;
+  p->size = (sizeof(OMS_HEADER_COMMON) + sizeof(OMS_HEADER_V2) + p->size);
   ch->size = (p->size>>24) | ((p->size>>8)&0xFF00) | ((p->size<<8)&0xFF0000) | (p->size<<24);
   deflateEnd(&strm);
 }

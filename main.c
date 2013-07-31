@@ -286,7 +286,7 @@ HANDLER handle_connection(void *arg)
     if (b[i] == 0) b[i] = ' ';
   b[j] = 0;
     
-//  printf("Req: \n%s\n", b);
+  //printf("Req: \n%s\n", b);
     
   char *url = strstr(b, "u=/obml/") + 8;
   if (url[1] == '/') url += 2;
@@ -302,6 +302,7 @@ HANDLER handle_connection(void *arg)
   
   if (get)
   {
+    //printf("GET data: %s\n",get);
     get += 2;
     char *action = get;
     get = strchr(get, '=');
@@ -364,7 +365,8 @@ HANDLER handle_connection(void *arg)
   {
     printf("Some occasion!\n");
   } else {
-    int tsize = p->size + sizeof(OMS_HEADER_COMMON);
+    //int tsize = p->size + sizeof(OMS_HEADER_COMMON);
+    int tsize = p->size;
 //    printf("size is %d\n", tsize);
     char *answer_t = "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nConnection: close\r\nContent-Length: %d\r\n\r\n";
     char *answer = malloc(strlen(answer_t) + 11);
